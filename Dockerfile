@@ -1,4 +1,4 @@
-FROM drydock/u16cppall:{{%TAG%}}
+FROM drydock/u16cppall:v5.7.1
 
 ADD . /u16_ci
 
