@@ -1,7 +1,7 @@
 ARG UBUNTU_VER=18.04
 FROM ubuntu:${UBUNTU_VER} as ugcc7
 
-RUN apt-get update && apt-get install -y --no-install-recommends g++-7 wget && \
+RUN apt-get update && apt-get install -y --no-install-recommends g++-7 wget ca-certificates && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60 && \
     update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60
 
