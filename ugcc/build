@@ -1,4 +1,5 @@
 #!/bin/bash
 set -o xtrace
 env
-docker build --build-arg UBUNTU_VER="${CACHE_TAG}.04" -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+echo "Building for ${CACHE_TAG}"
+docker build --build-arg DIST="${CACHE_TAG}" -f $DOCKERFILE_PATH -t $IMAGE_NAME .
