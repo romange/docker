@@ -1,5 +1,9 @@
 ARG UBUNTU_VER=18.04
 FROM ubuntu:${UBUNTU_VER} as ugcc7
+ARG UBUNTU_VER
+
+RUN [ "${UBUNTU_VER}" = "18.04" ] || { apt-get update && apt-get install -y --no-install-recommends \
+    software-properties-common && add-apt-repository ppa:ubuntu-toolchain-r/test ; }
 
 RUN apt-get update && apt-get install -y --no-install-recommends g++-7 wget ca-certificates && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 60 && \
