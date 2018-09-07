@@ -1,6 +1,8 @@
 #!/bin/bash
+set -o xtrace
 
-BOOST_NAME=$1
+BOOST_VERSION=$1
+BOOST_NAME=boost_${BOOST_VERSION}
 
 wget -nv "https://dl.bintray.com/boostorg/release/$(echo ${BOOST_VERSION} | tr '_' '.')/source/${BOOST_NAME}.tar.bz2"
 tar -xjf ${BOOST_NAME}.tar.bz2 && rm ${BOOST_NAME}.tar.bz2 && cd ${BOOST_NAME}
