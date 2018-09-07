@@ -12,5 +12,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certifi
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \
                         --slave /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER} \
-
+ENV PATH /usr/lib/ccache:$PATH
 
