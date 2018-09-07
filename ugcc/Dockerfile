@@ -8,7 +8,7 @@ RUN [ "${DIST}" = "18" ] || { apt-get update && apt-get install -y --no-install-
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certificates g++-${GCC_VER}  \
     libunwind-dev libevent-dev ninja-build ccache cmake libbz2-dev \
-    git make autoconf curl unzip automake zlib1g-dev python2.7 python-setuptools zip
+    git make autoconf curl unzip automake zlib1g-dev python2.7 python-setuptools zip libtool
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \
                         --slave /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER}
