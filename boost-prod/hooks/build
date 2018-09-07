@@ -1,0 +1,7 @@
+#!/bin/bash
+set -o xtrace
+env
+
+echo "Building for ${DOCKER_TAG} from ${SOURCE_COMMIT}"
+
+docker build --build-arg DIST=${DOCKER_TAG} -f $DOCKERFILE_PATH -t $IMAGE_NAME .
