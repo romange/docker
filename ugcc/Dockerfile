@@ -7,7 +7,7 @@ RUN [ "${DIST}" = "18" ] || { apt-get update && apt-get install -y --no-install-
     software-properties-common bzip2 && add-apt-repository ppa:ubuntu-toolchain-r/test ; }
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certificates g++-${GCC_VER}  \
-    libunwind-dev libevent-dev ninja-build ccache cmake \
+    libunwind-dev libevent-dev ninja-build ccache cmake libbz2-dev \
     git make autoconf curl unzip automake zlib1g-dev python2.7 python-setuptools zip
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \

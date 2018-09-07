@@ -13,3 +13,9 @@ RUN ./b2 --link=shared cxxflags="-std=c++14 -Wno-deprecated-declarations"  --var
          --without-test --without-python --without-mpi --without-graph --without-regex --without-wave --without-random --without-contract \
          --without-locale -j4
 RUN ./b2 -d0 install
+
+
+FROM romange/ugcc:${DIST}
+
+COPY --from=booster /opt/boost /usr/local
+RUN apt-get install -y  --no-install-recommends libbz2-dev
