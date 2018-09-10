@@ -31,7 +31,7 @@ script:
       pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} .
     }
     deploy() {
-      set IMAGE=romange/$1:$DIST
+      IMAGE=romange/$1:$DIST
       cd $1 && build $IMAGE && push $IMAGE && cd ..
     }
     deploy ugcc
