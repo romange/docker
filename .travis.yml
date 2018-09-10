@@ -32,7 +32,9 @@ script:
     }
     deploy() {
       IMAGE=romange/$1:$DIST
+      date
       cd $1 && build $IMAGE && push $IMAGE && cd ..
+      date
     }
     deploy ugcc
     deploy boost-dev
