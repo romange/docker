@@ -1,6 +1,6 @@
 sudo: enabled
 dist: xenial
-# language: cpp
+language: cpp
 services:
   - docker
 
@@ -19,6 +19,9 @@ before_install:
     - echo "$DOCKER_PASSWORD" | docker login -u romange --password-stdin
 
 script:
-  - cd boost-prod
-  - docker build -t romange/boost-prod:${DIST} --build-arg DIST=${DIST} .
-  - docker push romange/boost-prod:${DIST}
+  - build(){ docker build -t romange/$1:${DIST} --build-arg DIST=${DIST} . ;}
+  - cd ugcc
+  - build ugcc . && docker push romange/ugcc:${DIST}
+  - cd ../boost-dev
+  - build boost-dev
+  - docker push romange/boost-dev:${DIST}
