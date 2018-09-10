@@ -1,18 +1,22 @@
 sudo: enabled
+dist: xenial
+language: cpp
 services:
   - docker
+
 addons:
   apt:
     packages:
       - docker-ce
 env:
   global:
-  - FOO=BAR
-  - secure: vH0kPGc+viMooSqVnkiwz8m2LVHwE/nRdgWT9xcVI79+tC/vwtivTPNXQCMoTqe4tI5nlpOz9hCkKKNGCEyoNHu84BdGGZNtvXrERbLMwnn1oq0rNf25o8K0QerRR7/T8feohdczJDGkIgBNlcnTXwM+faD1NI1l9pjBTetnrwlg+zCqhZW5gCD0K1bggEn0jHAWIz6Hjt2+d2W5exPsxsFUxYeYMdmnNy0KHR7tEgD2dabc1tMtLS9oIvEzvEnWtUHA2LX9ZIkwaGwB3BFNJ1Uq470Tt2F2JlHiTqfUEvQ7DChchv1xCELw8NMAsc/6CfIY1ZZIqhswV+qKu3AlDYpV8757AL/4O1JvM8fcEE42Sai//Wf/nx33TpzKe1BcQa6i/pZU+hdqlZQ4FWAGbkE0Y5yuviDYsHYcseGSfKlYJERTwTBKmIa203UzkMRGHwTdQNXXXViPuYOOda5YPVRj1N9QKAIRUIL52FdHWCGDtIqCdTv2OzsFp2FNwPa3fFd9U43CjiZwMb7fUDSh9A+9Nqxk3y02+zC7JJpxco9Ko8Wvq+Vmh1A3QfFM4vOQvRR3ZJtCl0HZsvwNr1o7YTn+NQ012yth1nzkSHP+Hu8wLxEzquNa823xXhkmEldFx0o2FmExhGT22xFwV/qierFllX/6E2I0ZeJB3PV4Zm8=
+    - secure: XuwXogstgKg/WBTNusaOvWshFid4Z3ZoPWEQIzRegb69sRhAg9LsueINLn4pI4YYEa7AlwRLkyWZqj5fLxALS/V733UbOLQXIGKLt8XmxDIT9+qFrtHy4EtQxa+Innr8MIIa5gWqkbrRBioTtlF8sUEh9VWzrFTtM7QxVMiESJ+e9NRnhstdswsPhuRj6qac6eKOKJKDxuz1avATZkz73AroDhB9E+VGg7uucuwhOJ1DZIMerLaH4x9bPtjGCNImnLAQDw0Jtw4rI21B1h19S5mHx7WQOBywKUKWHTua6KBaBP8A0IZjXzm6Mx0BKS2ZJqPoNIYhYSQSGuzHX2vwKo9WEuohvokMXzyNsuGCWIgERj0GNRvTv2K75rHIATtVy51YgeMuyEfHZaqto8EcyqMg7j7sAcYNkVCbl9NjfRTRk9XfE3PQyEPAQNKE/esCDdzvd1YQKFKWYqhdhgxeoAdk0oiQieasHdHFew9hLFlNapAZeKVDziZIh6NYj7XG8qLi5Hy8oh7EuJ8I2B7B2SvSjtNfLgUYoHYCiT/yajhoVw4uj4bkPa9Lt7TLVHOwpKXfxDoEOe0ES8JTfV+hfuK33cXVyblm/lzTFpf5X8AYOfMRp3kNT9mwWaAZeTvB2vbRr7WSBB20EkrkRUGVeEyA49sEtaVwMU9Hbhe9RCk=
   matrix:
-  - DIST=16
-  - DIST=18
+    - DIST=16
+    - DIST=18
+
 script:
   - cd boost-prod
-  - echo ${docker_user}
-  - docker build -t romange/boost-prod:${DIST} --build-arg DIST=16 .
+  - echo "$DOCKER_PASSWORD" | docker login -u romange --password-stdin
+  - docker build -t romange/boost-prod:${DIST} --build-arg DIST=${DIST} .
+  - docker push romange/boost-prod:${DIST}
