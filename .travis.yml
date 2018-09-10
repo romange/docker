@@ -20,10 +20,21 @@ before_install:
 
 script:
   # build aliases
-  - build() { docker build -t romange/$1:${DIST} --build-arg DIST=${DIST} . ;}
-  - push() { docker push romange/$1:${DIST} ;}
-  - pull() { docker pull romange/$1:${DIST} ;}
-  - deploy() { cd $1 && pull $1 && build $1 && push $1 && cd ..;}
-  - deploy ugcc
-  - deploy boost-dev
-  - deploy boost-prod
+  - |
+    push() {
+      docker push $1
+    }
+    pull() {
+      docker pull $1
+    }
+    build() {
+      pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} .
+    }
+    deploy() {
+      set IMAGE=romange/$1:$DIST
+      cd $1 && build $IMAGE && push $IMAGE && cd ..
+    }
+    deploy ugcc
+    deploy boost-dev
+    deploy boost-prod
+  - echo "Success"

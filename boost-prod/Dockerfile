@@ -1,5 +1,5 @@
 ARG DIST=18
-FROM romange/boost-builder:$DIST as boost_libs
+FROM romange/boost-dev:$DIST as boost_libs
 
 FROM ubuntu:${DIST}.04
 ARG DIST
