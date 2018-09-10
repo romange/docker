@@ -19,9 +19,11 @@ before_install:
     - echo "$DOCKER_PASSWORD" | docker login -u romange --password-stdin
 
 script:
-  - build(){ docker build -t romange/$1:${DIST} --build-arg DIST=${DIST} . ;}
-  - cd ugcc
-  - build ugcc . && docker push romange/ugcc:${DIST}
-  - cd ../boost-dev
-  - build boost-dev
-  - docker push romange/boost-dev:${DIST}
+  # build aliases
+  - build() { docker build -t romange/$1:${DIST} --build-arg DIST=${DIST} . ;}
+  - push() { docker push romange/$1:${DIST} ;}
+  - pull() { docker pull romange/$1:${DIST} ;}
+  - deploy() { cd $1 && pull $1 && build $1 && push $1 && cd ..;}
+  - deploy ugcc
+  - deploy boost-dev
+  - deploy boost-prod
