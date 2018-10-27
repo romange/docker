@@ -7,4 +7,5 @@ COPY install.sh /tmp/
 RUN /tmp/install.sh ${DIST}
 
 COPY --from=boost_libs /opt/boost/lib/*.so.* /usr/local/lib/
+RUN ldconfig /usr/local/lib/
 WORKDIR /app
