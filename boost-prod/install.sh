@@ -17,8 +17,8 @@ fi
 apt-get update && setup libunwind8 binutils htop
 
 if [ "${DIST}" = "18" ]; then
-  setup libevent-2.1-6 libevent-pthreads-2.1-6
+  # setup libevent-2.1-6 libevent-pthreads-2.1-6
 else
-  setup  libevent-2.0-5 libevent-pthreads-2.0-5
+  # setup  libevent-2.0-5 libevent-pthreads-2.0-5
   apt-get upgrade -y libstdc++6
 fi

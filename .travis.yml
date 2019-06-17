@@ -11,6 +11,7 @@ addons:
 env:
   global:
     - secure: XuwXogstgKg/WBTNusaOvWshFid4Z3ZoPWEQIzRegb69sRhAg9LsueINLn4pI4YYEa7AlwRLkyWZqj5fLxALS/V733UbOLQXIGKLt8XmxDIT9+qFrtHy4EtQxa+Innr8MIIa5gWqkbrRBioTtlF8sUEh9VWzrFTtM7QxVMiESJ+e9NRnhstdswsPhuRj6qac6eKOKJKDxuz1avATZkz73AroDhB9E+VGg7uucuwhOJ1DZIMerLaH4x9bPtjGCNImnLAQDw0Jtw4rI21B1h19S5mHx7WQOBywKUKWHTua6KBaBP8A0IZjXzm6Mx0BKS2ZJqPoNIYhYSQSGuzHX2vwKo9WEuohvokMXzyNsuGCWIgERj0GNRvTv2K75rHIATtVy51YgeMuyEfHZaqto8EcyqMg7j7sAcYNkVCbl9NjfRTRk9XfE3PQyEPAQNKE/esCDdzvd1YQKFKWYqhdhgxeoAdk0oiQieasHdHFew9hLFlNapAZeKVDziZIh6NYj7XG8qLi5Hy8oh7EuJ8I2B7B2SvSjtNfLgUYoHYCiT/yajhoVw4uj4bkPa9Lt7TLVHOwpKXfxDoEOe0ES8JTfV+hfuK33cXVyblm/lzTFpf5X8AYOfMRp3kNT9mwWaAZeTvB2vbRr7WSBB20EkrkRUGVeEyA49sEtaVwMU9Hbhe9RCk=
+    - BVER=1_70_0
   matrix:
     - DIST=16
     - DIST=18
@@ -21,14 +22,13 @@ before_install:
 script:
   # build aliases
   - |
-    push() {
-      docker push $1
-    }
-    pull() {
-      docker pull $1
-    }
+    push() { docker push $1 }
+
+    pull() { docker pull $1 }
+
     build() {
-      pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} .
+      pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} \
+        --build-arg BOOST_VERSION=${BVER} .
     }
     deploy() {
       IMAGE=romange/$1:$DIST
