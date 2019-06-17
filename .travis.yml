@@ -22,6 +22,7 @@ before_install:
 script:
   # build aliases
   - |
+    set -e
     push() {  #function definition must be multi-line
       docker push $1
     }
