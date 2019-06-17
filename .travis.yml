@@ -22,14 +22,19 @@ before_install:
 script:
   # build aliases
   - |
-    push() { docker push $1 }
+    push() {  #function definition must be multi-line
+      docker push $1
+    }
 
-    pull() { docker pull $1 }
+    pull() {
+      docker pull $1
+    }
 
     build() {
       pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} \
         --build-arg BOOST_VERSION=${BVER} .
     }
+
     deploy() {
       IMAGE=romange/$1:$DIST
       date
