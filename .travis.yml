@@ -23,7 +23,8 @@ matrix:
 
 before_install:
     - docker --version
-    - docker login -u romange -p "$DOCKER_PASSWORD"
+    - echo "foo${DOCKER_PASSWORD}bar"
+    - echo "${DOCKER_PASSWORD}" | docker login -u romange --password-stdin
     - eval "${MATRIX_EVAL}"
 
 script:
