@@ -22,7 +22,8 @@ matrix:
         - MATRIX_EVAL="DIST=18 BVER=1_71_0"
 
 before_install:
-    - echo "$DOCKER_PASSWORD" | docker login -u romange --password-stdin
+    - docker --version
+    - docker login -u romange -p "$DOCKER_PASSWORD"
     - eval "${MATRIX_EVAL}"
 
 script:
