@@ -1,5 +1,6 @@
 sudo: enabled
 dist: xenial
+language: generic
 services:
   - docker
 
@@ -39,7 +40,7 @@ script:
     }
 
     build() {
-      pull $1 && docker build --cache-from $1 -t $1 --build-arg DIST=${DIST} \
+      docker build -t $1 --build-arg DIST=${DIST} \
         --build-arg BOOST_VERSION=${BVER} .
     }
 
