@@ -1,6 +1,5 @@
 sudo: enabled
 dist: xenial
-language: cpp
 services:
   - docker
 
@@ -23,12 +22,12 @@ matrix:
 
 before_install:
     - docker --version
-    - echo "foo${DOCKER_PASSWORD}bar"
-    - echo "${DOCKER_PASSWORD}" | docker login -u romange --password-stdin
     - eval "${MATRIX_EVAL}"
+    - env
 
 script:
   # build aliases
+  - echo "${DOCKER_PASSWORD}" | docker login -u romange --password-stdin
   - |
     set -e
     push() {  #function definition must be multi-line
