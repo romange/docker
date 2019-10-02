@@ -16,8 +16,9 @@ if [ "${DIST}" = "16" ]; then
 fi
 
 apt-get update
-setup libunwind8 binutils htop bzip2 wget ca-certificates g++-${GCC_VER} libunwind-dev libevent-dev \
-      ninja-build ccache cmake libbz2-dev git make autoconf curl unzip automake zlib1g-dev python3-setuptools zip libtool
+setup libunwind8 binutils htop bzip2 wget ca-certificates g++-${GCC_VER} libunwind-dev  \
+      ninja-build ccache cmake libbz2-dev git make autoconf curl unzip automake \
+      zlib1g-dev python3-setuptools zip libtool libssl-dev
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \
                     --slave /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER}
