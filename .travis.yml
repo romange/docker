@@ -53,8 +53,9 @@ script:
     deploy() {
       set -e
       IMAGE=romange/$1:$2
-      date
+      echo $1 `date`
       cd $1 && build $IMAGE && push $IMAGE && cd ..
+      echo "status $? for $1"
       date
     }
 
