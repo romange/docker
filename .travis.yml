@@ -32,7 +32,12 @@ script:
   - |
     set -e
     push() {  #function definition must be multi-line
-      docker push $1
+      if [[ ($TRAVIS_BRANCH == master) &&
+              ($TRAVIS_PULL_REQUEST == false) ]] ; then
+        docker push $1
+      else
+        echo "skipping docker push $1"
+      fi
     }
 
     pull() {
