@@ -32,7 +32,12 @@ script:
   - |
     set -e
     push() {  #function definition must be multi-line
-      docker push $1
+      if [[ ($TRAVIS_BRANCH == master) &&
+              ($TRAVIS_PULL_REQUEST == false) ]] ; then
+        docker push $1
+      else
+        echo "skipping docker push $1"
+      fi
     }
 
     pull() {
@@ -40,17 +45,20 @@ script:
     }
 
     build() {
+      set -e
       docker build -t $1 --build-arg DIST=${DIST} \
         --build-arg BOOST_VERSION=${BVER} .
     }
 
     deploy() {
-      IMAGE=romange/$1:${DIST}_${BVER}
+      set -e
+      IMAGE=romange/$1:$2
       date
       cd $1 && build $IMAGE && push $IMAGE && cd ..
       date
     }
-    deploy ugcc
-    deploy boost-dev
-    deploy boost-prod
+
+    deploy ugcc ${DIST}
+    deploy boost-dev ${DIST}_${BVER}
+    deploy boost-prod ${DIST}_${BVER}
   - echo "Success"
