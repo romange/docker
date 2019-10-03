@@ -54,7 +54,7 @@ script:
       set -e
       IMAGE=romange/$1:$2
       echo $1 `date`
-      cd $HOME/$1 && build $IMAGE
+      cd $TRAVIS_BUILD_DIR/$1 && build $IMAGE
       echo "status $? for $1"
       push $IMAGE
       echo "Succeeded with $1"
