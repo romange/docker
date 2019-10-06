@@ -17,8 +17,11 @@ fi
 
 apt-get update
 setup libunwind8 binutils htop bzip2 wget ca-certificates g++-${GCC_VER} libunwind-dev  \
-      ninja-build ccache cmake libbz2-dev git make autoconf curl unzip automake \
+      ninja-build ccache libbz2-dev git make autoconf curl unzip automake \
       zlib1g-dev python3-setuptools zip libtool libssl-dev
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \
                     --slave /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER}
+
+wget https://github.com/Kitware/CMake/releases/download/v3.12.2/cmake-3.12.2-Linux-x86_64.sh
+sh cmake-3.12.2-Linux-x86_64.sh --skip-license --prefix=/usr/local
