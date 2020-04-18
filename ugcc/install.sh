@@ -15,6 +15,7 @@ if [ "${DIST}" = "16" ]; then
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F
 fi
 
+# To avoid tzdata reconfigure
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
@@ -24,6 +25,3 @@ setup libunwind8 binutils htop bzip2 wget ca-certificates g++-${GCC_VER} libunwi
 
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_VER} 60 \
                     --slave /usr/bin/g++ g++ /usr/bin/g++-${GCC_VER}
-
-ln -fs /usr/share/zoneinfo/Greenwich /etc/localtime
-dpkg-reconfigure --frontend noninteractive tzdata
