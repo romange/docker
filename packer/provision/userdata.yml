@@ -18,4 +18,5 @@ users:
 packages: [ htop, wget, unzip, zip, curl, binutils, bzip2, wget, ca-certificates, libunwind-dev,
   g++, linux-tools-common, ninja-build, ccache, libbz2-dev, git, make, autoconf, curl, automake,
   libtool, libssl-dev, libxml2-dev, golang, docker.io, python3-setuptools, cmake,
-  libhugetlbfs-bin, awscli, mlocate, doxygen]
+  libhugetlbfs-bin, awscli, mlocate, doxygen, python3-pip, ack-grep, iftop, vim,
+  vim-gui-common, net-tools, libncurses5-dev]

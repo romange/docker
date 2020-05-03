@@ -9,7 +9,8 @@ setup() {
   apt-get install -y --no-install-recommends $@
 }
 
-setup htop iotop sysstat ack-grep iftop vim vim-gui-common
+setup htop iotop sysstat
+pip3 install s3cmd
 
 # Dispatch files
 tf=/tmp/files
@@ -19,6 +20,10 @@ mv $tf/huge_multiuser.service /etc/systemd/system/
 mv $tf/local.conf /etc/sysctl.d/
 
 systemctl enable huge_multiuser.service
+
+echo "* soft nofile 65535" >> /etc/security/limits.conf
+echo "* soft core unlimited" >> /etc/security/limits.conf
+
 
 echo "********* User Setup ********"
 root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
@@ -34,13 +39,14 @@ mkdir -p .aws projects bin /root/.aws .tmux
 cp $tf/aws_config .aws/config
 cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
-
-pushd projects && git clone https://github.com/axboe/liburing.git
-cd liburing && ./configure
-make -j4 install
-popd
+mv $tf/disableht.sh bin/
 
 chown -R dev:dev /home/dev
+
+# Copy useful binaries
+ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
+s3cmd get $ARTPATH/bin/* bin/
+
 
 echo "********* Install BOOST ********"
 BVER=1.73.0
@@ -68,7 +74,5 @@ echo "Building targets with ${b2_args[@]}"
 ./b2 install "${b2_args[@]}" -d0
 ln -s /opt/${BOOST} /opt/boost
 
-# Huge pages.
-sudo chown -R :adm /dev/hugepages
-sudo chmod -R g+rw /dev/hugepages
-
+s3cmd get $ARTPATH/k5.7/* /tmp/
+dpkg -i /tmp/*deb
