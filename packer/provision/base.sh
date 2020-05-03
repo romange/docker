@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "********* Install Basics Server Environment ********"
 
@@ -8,14 +9,16 @@ setup() {
   apt-get install -y --no-install-recommends $@
 }
 
-setup python3-setuptools libtool cmake golang
-
-setup htop iotop sysstat ack-grep iftop vim vim-gui-common libhugetlbfs-bin
+setup htop iotop sysstat ack-grep iftop vim vim-gui-common
 
 # To allow running perf as non-root
 echo 'kernel.perf_event_paranoid = 1' >> /etc/sysctl.d/local.conf
 echo 'kernel.kptr_restrict = 0' >> /etc/sysctl.d/local.conf
 
+mv /tmp/huge_pages.service /etc/systemd/
+mv /tmp/changedns.sh /var/lib/cloud/scripts/per-boot/
+
+echo "********* User Setup ********"
 root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
 
 cd /home/dev
@@ -23,7 +26,19 @@ cd /home/dev
 wget -qnc $root_gist/.gitconfig
 wget -qnc $root_gist/.bash_alias
 wget -qnc $root_gist/.bashrc
+wget -qnc $root_gist/.tmux.conf
 
+mkdir -p .aws projects bin
+mv /tmp/aws_config .aws/config
+
+
+pushd projects && git clone https://github.com/axboe/liburing.git
+cd liburing && ./configure
+make -j4 install
+popd
+
+
+echo "********* Install BOOST ********"
 BVER=1.73.0
 BOOST=boost_${BVER//./_}   # replace all . with _
 
@@ -47,3 +62,9 @@ b2_args=(define=BOOST_COROUTINES_NO_DEPRECATION_WARNING=1 link=shared variant=re
 echo "Building targets with ${b2_args[@]}"
 ./b2 "${b2_args[@]}" cxxflags='-std=c++14 -Wno-deprecated-declarations'
 ./b2 install "${b2_args[@]}" -d0
+ln -s /opt/${BOOST} /opt/boost
+
+# Huge pages.
+sudo chown -R :adm /dev/hugepages
+sudo chmod -R g+rw /dev/hugepages
+

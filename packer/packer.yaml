@@ -18,7 +18,7 @@ builders:
   force_deregister: true
   force_delete_snapshot: true
   iam_instance_profile: PackerBuilderRole
-  instance_type: t3.small
+  instance_type: t3.large
   name: '{{ user `name` }}-{{isotime}}'
   region: '{{ user `aws_region` }}'
   source_ami: ami-0dad359ff462124ca
@@ -29,12 +29,21 @@ builders:
     Release: Focal
   user_data_file: provision/userdata.yml
 provisioners:
+- type: file
+  source: provision/huge_pages.service
+  destination: /tmp/
+- type: file
+  source: provision/aws_config
+  destination: /tmp/
+- type: file
+  source: provision/changedns.sh
+  destination: /tmp/
 - type: shell
   inline:
   - |
     while [ ! -f /var/lib/cloud/instance/boot-finished ]
       do echo 'Waiting for cloud-init...'
-    sleep 1
+    sleep 10
     done
   - echo finished
 - type: shell
@@ -43,8 +52,5 @@ provisioners:
   # to pipe the password into it.
   execute_command: "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
   script: provision/base.sh
-- type: file
-  source: provision/huge_pages.service
-  destination: /etc/systemd/
 
 
