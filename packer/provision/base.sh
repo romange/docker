@@ -11,12 +11,14 @@ setup() {
 
 setup htop iotop sysstat ack-grep iftop vim vim-gui-common
 
-# To allow running perf as non-root
-echo 'kernel.perf_event_paranoid = 1' >> /etc/sysctl.d/local.conf
-echo 'kernel.kptr_restrict = 0' >> /etc/sysctl.d/local.conf
+# Dispatch files
+tf=/tmp/files
+mv $tf/huge_pages.service /etc/systemd/system/
+mv $tf/changedns.sh /var/lib/cloud/scripts/per-boot/
+mv $tf/huge_multiuser.service /etc/systemd/system/
+mv $tf/local.conf /etc/sysctl.d/
 
-mv /tmp/huge_pages.service /etc/systemd/
-mv /tmp/changedns.sh /var/lib/cloud/scripts/per-boot/
+systemctl enable huge_multiuser.service
 
 echo "********* User Setup ********"
 root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
@@ -28,15 +30,17 @@ wget -qnc $root_gist/.bash_alias
 wget -qnc $root_gist/.bashrc
 wget -qnc $root_gist/.tmux.conf
 
-mkdir -p .aws projects bin
-mv /tmp/aws_config .aws/config
-
+mkdir -p .aws projects bin /root/.aws .tmux
+cp $tf/aws_config .aws/config
+cp $tf/aws_config /root/.aws/config
+cp $tf/reset .tmux/
 
 pushd projects && git clone https://github.com/axboe/liburing.git
 cd liburing && ./configure
 make -j4 install
 popd
 
+chown -R dev:dev /home/dev
 
 echo "********* Install BOOST ********"
 BVER=1.73.0

@@ -30,13 +30,7 @@ builders:
   user_data_file: provision/userdata.yml
 provisioners:
 - type: file
-  source: provision/huge_pages.service
-  destination: /tmp/
-- type: file
-  source: provision/aws_config
-  destination: /tmp/
-- type: file
-  source: provision/changedns.sh
+  source: provision/files
   destination: /tmp/
 - type: shell
   inline:
