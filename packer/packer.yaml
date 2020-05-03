@@ -1,0 +1,50 @@
+variables:
+  aws_region: eu-west-1
+  name: u20.04-ami
+
+builders:
+- type: amazon-ebs
+  ami_block_device_mappings:
+  - delete_on_termination: true
+    device_name: /dev/sda1
+    encrypted: false
+    volume_size: 16
+    volume_type: gp2
+  ami_description: AMI of {{ user `name` }}
+  ami_name: '{{ user `name` }}'
+  ami_virtualization_type: hvm
+  ena_support: true
+  encrypt_boot: 'false'
+  force_deregister: true
+  force_delete_snapshot: true
+  iam_instance_profile: PackerBuilderRole
+  instance_type: t3.small
+  name: '{{ user `name` }}-{{isotime}}'
+  region: '{{ user `aws_region` }}'
+  source_ami: ami-0dad359ff462124ca
+  ssh_username: ubuntu
+  tags:
+    Name: Ubuntu Focal base
+    OS_Version: Ubuntu
+    Release: Focal
+  user_data_file: provision/userdata.yml
+provisioners:
+- type: shell
+  inline:
+  - |
+    while [ ! -f /var/lib/cloud/instance/boot-finished ]
+      do echo 'Waiting for cloud-init...'
+    sleep 1
+    done
+  - echo finished
+- type: shell
+  # {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
+  # containing inline commands. Since sudo in ec2 is without a password we do not have
+  # to pipe the password into it.
+  execute_command: "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
+  script: provision/base.sh
+- type: file
+  source: provision/huge_pages.service
+  destination: /etc/systemd/
+
+
