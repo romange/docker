@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+export AWS_DEFAULT_REGION=eu-west-1
+
 echo "********* Install Basics Server Environment ********"
 
 export DEBIAN_FRONTEND=noninteractive
@@ -41,11 +43,13 @@ cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
 mv $tf/disableht.sh bin/
 
-chown -R dev:dev /home/dev
-
 # Copy useful binaries
 ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
 s3cmd get $ARTPATH/bin/* bin/
+
+# Finally, fix permissions.
+chown -R dev:dev /home/dev
+chmod a+x bin/*
 
 
 echo "********* Install BOOST ********"
