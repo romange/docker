@@ -1,6 +1,8 @@
 variables:
   aws_region: eu-west-1
-  name: u20.04-ami
+  name: "{{env `NAME`}}"
+  src_ami_id: "{{env `SRC_AMI_ID`}}"
+  instance_type: "{{env `INSTANCE_TYPE` }}"
 
 builders:
 - type: amazon-ebs
@@ -18,16 +20,17 @@ builders:
   force_deregister: true
   force_delete_snapshot: true
   iam_instance_profile: PackerBuilderRole
-  instance_type: t3.large
+  instance_type: '{{ user `instance_type` }}'
   name: '{{ user `name` }}-{{isotime}}'
   region: '{{ user `aws_region` }}'
-  source_ami: ami-0dad359ff462124ca
+  source_ami: '{{ user `src_ami_id` }}'
   ssh_username: ubuntu
   tags:
-    Name: Ubuntu Focal base
+    Name: Ubuntu Focal
     OS_Version: Ubuntu
     Release: Focal
   user_data_file: provision/userdata.yml
+
 provisioners:
 - type: file
   source: provision/files

@@ -32,10 +32,10 @@ root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
 
 cd /home/dev
 
-wget -qnc $root_gist/.gitconfig
-wget -qnc $root_gist/.bash_alias
-wget -qnc $root_gist/.bashrc
-wget -qnc $root_gist/.tmux.conf
+for i in .gitconfig .bash_aliases .bashrc .tmux.conf
+ do
+  wget -qnc $root_gist/$i
+done
 
 mkdir -p .aws projects bin /root/.aws .tmux
 cp $tf/aws_config .aws/config
@@ -78,5 +78,3 @@ echo "Building targets with ${b2_args[@]}"
 ./b2 install "${b2_args[@]}" -d0
 ln -s /opt/${BOOST} /opt/boost
 
-s3cmd get $ARTPATH/k5.7/* /tmp/
-dpkg -i /tmp/*deb
