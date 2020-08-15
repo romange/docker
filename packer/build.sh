@@ -15,6 +15,9 @@ while (( "$#" )); do
   esac
 done
 
+# Check in http://cloud-images.ubuntu.com/locator/ec2/
+# for eu-west-1 focal
+#
 if [ $IS_ARM -eq 1 ]; then
   export SRC_AMI_ID=ami-0fa1efaadcbd8f3de
   export INSTANCE_TYPE=m6g.medium

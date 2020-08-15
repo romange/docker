@@ -14,7 +14,7 @@ setup() {
 setup htop iotop sysstat
 pip3 install s3cmd
 
-# Dispatch files
+# Dispatch files that were put by packer.yaml into /tmp/files
 tf=/tmp/files
 mv $tf/huge_pages.service /etc/systemd/system/
 mv $tf/changedns.sh /var/lib/cloud/scripts/per-boot/
@@ -42,6 +42,7 @@ cp $tf/aws_config .aws/config
 cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
 mv $tf/disableht.sh bin/
+mv $tf/update_kernel.py bin/
 
 # Copy useful binaries
 ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
