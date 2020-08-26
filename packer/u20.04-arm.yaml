@@ -1,0 +1,9 @@
+#@data/values
+
+---
+  ami_id: ami-0d83f7ffc3bcda389
+  instance_type: m6g.medium
+  name: u20.04-aarch64
+  os_version: Ubuntu
+  os_name: Ubuntu Focal
+  packer_user: ubuntu

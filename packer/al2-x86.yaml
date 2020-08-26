@@ -1,0 +1,10 @@
+#@data/values
+
+---
+  ami_id: ami-07d9160fa81ccffb5
+  instance_type: t3.large
+  name: al2-x86
+  os_version: AL2
+  os_name: Amazon Linux 2
+  packer_user: ec2-user
+

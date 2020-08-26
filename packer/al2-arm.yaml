@@ -1,0 +1,10 @@
+#@data/values
+
+---
+  ami_id: ami-08f51d843bf37ded6
+  instance_type: m6g.medium
+  name: al2-aarch64
+  os_version: AL2
+  os_name: Amazon Linux 2
+  packer_user: ec2-user
+

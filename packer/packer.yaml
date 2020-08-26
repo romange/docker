@@ -1,8 +1,10 @@
+#@ load("@ytt:data", "data")
+
 variables:
   aws_region: eu-west-1
-  name: "{{env `NAME`}}"
-  src_ami_id: "{{env `SRC_AMI_ID`}}"
-  instance_type: "{{env `INSTANCE_TYPE` }}"
+  name: #@ data.values.name
+  src_ami_id: #@ data.values.ami_id
+  instance_type: #@ data.values.instance_type
 
 builders:
 - type: amazon-ebs
@@ -24,11 +26,10 @@ builders:
   name: '{{ user `name` }}-{{isotime}}'
   region: '{{ user `aws_region` }}'
   source_ami: '{{ user `src_ami_id` }}'
-  ssh_username: ubuntu
+  ssh_username: #@ data.values.packer_user
   tags:
-    Name: Ubuntu Focal
-    OS_Version: Ubuntu
-    Release: Focal
+    Name: #@ data.values.os_name
+    OS_Version: #@ data.values.os_version
   user_data_file: provision/userdata.yml
 
 provisioners:
@@ -44,9 +45,9 @@ provisioners:
     done
   - echo finished
 - type: shell
-  # {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
-  # containing inline commands. Since sudo in ec2 is without a password we do not have
-  # to pipe the password into it.
+  #! {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
+  #! containing inline commands. Since sudo in ec2 is without a password we do not have
+  #! to pipe the password into it.
   execute_command: "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
   script: provision/base.sh
 

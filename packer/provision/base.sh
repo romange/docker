@@ -7,11 +7,7 @@ echo "********* Install Basics Server Environment ********"
 
 export DEBIAN_FRONTEND=noninteractive
 
-setup() {
-  apt-get install -y --no-install-recommends $@
-}
 
-setup htop iotop sysstat
 pip3 install s3cmd
 
 # Dispatch files that were put by packer.yaml into /tmp/files
