@@ -1,0 +1,6 @@
+#@data/values
+---
+
+os_version: al2
+os_name: Amazon Linux 2
+packer_user: ec2-user

@@ -15,8 +15,10 @@ fi
 
 IS_ARM=0
 AL2=0
-while (( "$#" )); do
-  case "$1" in
+
+for ((i=1;i <= $#;));do
+  arg=${!i}
+  case "$arg" in
     --arm)
     IS_ARM=1
     shift
@@ -25,10 +27,9 @@ while (( "$#" )); do
     AL2=1
     shift
   ;;
-  -*|--*=) # unsupported flags
-      echo "Error: Unsupported flag $1" >&2
-      exit 1
-      ;;
+  -*|--*=) # bypass flags
+      i=$((i + 1))
+  ;;
   esac
 done
 
@@ -37,17 +38,25 @@ done
 # or go to http://cloud-images.ubuntu.com/query/focal/server/released.current.txt
 if [[ $IS_ARM == 1 && $AL2 == 1 ]]; then
   config=al2-arm.yaml
+  os_vars=al2.yaml
 elif [[ $IS_ARM == 1 && $AL2 == 0 ]]; then
   config=u20.04-arm.yaml
+  os_vars=ubuntu.yaml
 elif [[ $IS_ARM == 0 && $AL2 == 1 ]]; then
   config=al2-x86.yaml
+  os_vars=al2.yaml
 elif [[ $IS_ARM == 0 && $AL2 == 0 ]]; then
   config=u20.04-x86.yaml
+  os_vars=ubuntu.yaml
 fi
 
+echo '#cloud-config' > /tmp/userdata.yml
+ytt -f ${os_vars} -f provision/userdata.yml >> /tmp/userdata.yml
 
 pfile=$(mktemp -u /tmp/packer.json.XXXX)
-ytt -f ${config} -f packer.yaml -o json > $pfile
+echo "Generating packer file $pfile"
+ytt -f packer.yaml -f ${config} -f ${os_vars} -o json > $pfile
+
 echo "Validating ${pfile}"
 packer validate $pfile
-packer build $pfile $@
+echo packer build $@ $pfile

@@ -1,4 +1,4 @@
-#cloud-config
+#@ load("@ytt:data", "data")
 
 package_update: true
 package_upgrade: true
@@ -6,8 +6,17 @@ package_upgrade: true
 groups:
   - docker
 
+yum_repos:
+    epel:
+        baseurl: http://download.fedoraproject.org/pub/epel/7/$basearch
+        enabled: true
+        gpgcheck: true
+        #! gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+        name: Extra Packages for Enterprise Linux 7 - $basearch
+
 users:
- - default  # Keeps the default ubuntu user intact
+ - default  #! Keeps the default ubuntu user intact
  - name: dev
    sudo: ALL=(ALL) NOPASSWD:ALL
    groups: adm, docker
@@ -15,10 +24,33 @@ users:
    ssh_authorized_keys:
      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCano8DfBycFQ/2OxszQ5ZcnHpodZBI4XGsiTK+bw/RxGgwdL6V3/de53DtjZNCltCgfU04fw8wntm2SJ/PyguN8O/Kj3qSD9QHI04CBe2P/Z+GOfJUo528ocIj2PnWHTV8zs5XZVyRaZCLyNfiKTnkfY7EoTHDVJcuUE669v9Q5FDPVBp0eUMGW49Gw1i1z6dXJiv7pfEGyKCcMuGiPnCB357XsuxKzEThazlpuRFWXPqilBOI8hSapMd8G0TXU9xhGNNzpBdrZg6DFvoXX2JChD9sOBNumS0FMv0BEBbZeonMzMHoVU6mMfFMnYAEMJesCXK12vcr440HM8sXC20H
 
-packages: [ ack-grep, automake, autoconf, binutils, bison, bzip2, ca-certificates, ccache, curl,
-  doxygen, htop, iftop, iotop, flex, gdb, graphviz, g++, libunwind-dev,
-  linux-tools-common, ninja-build,
-  libbz2-dev, git, make, sysstat,  libtool, libssl-dev, libxml2-dev, golang, docker.io,
-  python3-setuptools, cmake,
-  libhugetlbfs-bin, awscli, mlocate, parallel, python3-pip, vim,
-  vim-gui-common, net-tools, libncurses5-dev, unzip, wget, zip]
+#@ common_pkgs = ["awscli", "automake", "autoconf", "binutils", "bison", "bzip2", "ca-certificates",
+#@                "ccache", "curl", "doxygen", "htop", "iftop", "iotop", "flex", "gdb", "graphviz",
+#@                  "git", "make", "sysstat",  "libtool", "mlocate",
+#@                  "ninja-build", "golang", "parallel", "python3-setuptools", "vim", "unzip",
+#@                  "wget", "zip"]
+
+
+#@ ubuntu_pkgs = [ "ack-grep", "cmake", "g++", "libunwind-dev", "linux-tools-common", "libbz2-dev",
+#@                 "docker.io", "libhugetlbfs-bin", "libncurses5-dev", "libssl-dev", "libxml2-dev",
+#@                 "vim-gui-common", "net-tools" ]
+
+#@ al2_pkgs    = [ "docker", "libunwind-devel", "gcc-c++", "perf", "openssl11-devel",
+#@                 "libxml2-devel", "ncurses-devel", "libhugetlbfs-utils"]
+
+
+#@ if data.values.os_version == "AL2":
+
+  #! Runs very early, before yum_repo
+bootcmd:
+  - echo bootcmd
+
+packages: #@ common_pkgs + al2_pkgs
+
+runcmd:
+  - amazon-linux-extras enable epel -y
+  - yum update -y
+#@ else:
+packages: #@ common_pkgs + ubuntu_pkgs
+#@ end
+

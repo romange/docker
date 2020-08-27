@@ -30,7 +30,7 @@ builders:
   tags:
     Name: #@ data.values.os_name
     OS_Version: #@ data.values.os_version
-  user_data_file: provision/userdata.yml
+  user_data_file: /tmp/userdata.yml
 
 provisioners:
 - type: file

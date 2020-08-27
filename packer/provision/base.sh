@@ -7,8 +7,9 @@ echo "********* Install Basics Server Environment ********"
 
 export DEBIAN_FRONTEND=noninteractive
 
-
+PATH=$PATH:/usr/local/bin
 pip3 install s3cmd
+which s3cmd
 
 # Dispatch files that were put by packer.yaml into /tmp/files
 tf=/tmp/files
