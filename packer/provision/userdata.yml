@@ -6,14 +6,14 @@ package_upgrade: true
 groups:
   - docker
 
-yum_repos:
-    epel:
-        baseurl: http://download.fedoraproject.org/pub/epel/7/$basearch
-        enabled: true
-        gpgcheck: true
-        #! gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
-        gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
-        name: Extra Packages for Enterprise Linux 7 - $basearch
+#! yum_repos:
+#!     epel:
+#!         baseurl: http://download.fedoraproject.org/pub/epel/7/$basearch
+#!         enabled: true
+#!         gpgcheck: true
+#!         #! gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+#!         gpgkey: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+#!         name: Extra Packages for Enterprise Linux 7 - $basearch
 
 users:
  - default  #! Keeps the default ubuntu user intact
@@ -27,30 +27,35 @@ users:
 #@ common_pkgs = ["awscli", "automake", "autoconf", "binutils", "bison", "bzip2", "ca-certificates",
 #@                "ccache", "curl", "doxygen", "htop", "iftop", "iotop", "flex", "gdb", "graphviz",
 #@                  "git", "make", "sysstat",  "libtool", "mlocate",
-#@                  "ninja-build", "golang", "parallel", "python3-setuptools", "vim", "unzip",
-#@                  "wget", "zip"]
+#@                  "ninja-build", "golang", "parallel", "python3-pip", "python3-setuptools",
+#@                  "vim", "unzip", "wget", "zip"]
 
 
 #@ ubuntu_pkgs = [ "ack-grep", "cmake", "g++", "libunwind-dev", "linux-tools-common", "libbz2-dev",
 #@                 "docker.io", "libhugetlbfs-bin", "libncurses5-dev", "libssl-dev", "libxml2-dev",
 #@                 "vim-gui-common", "net-tools" ]
 
-#@ al2_pkgs    = [ "docker", "libunwind-devel", "gcc-c++", "perf", "openssl11-devel",
-#@                 "libxml2-devel", "ncurses-devel", "libhugetlbfs-utils"]
+#@ al2_pkgs    = [ "bash-completion-extras", "docker", "libunwind-devel", "gcc-c++", "perf",
+#@                 "openssl11-devel", "libxml2-devel", "ncurses-devel", "libhugetlbfs-utils",
+#@                 "patch"]
 
 
 #@ if data.values.os_version == "AL2":
 
   #! Runs very early, before yum_repo
 bootcmd:
-  - echo bootcmd
+  - amazon-linux-extras install epel kernel-ng -y
+  - yum clean metadata
 
 packages: #@ common_pkgs + al2_pkgs
 
 runcmd:
-  - amazon-linux-extras enable epel -y
   - yum update -y
+  - echo "*    -    memlock  65535" >> /etc/security/limits.conf
+
 #@ else:
+
 packages: #@ common_pkgs + ubuntu_pkgs
+
 #@ end
 

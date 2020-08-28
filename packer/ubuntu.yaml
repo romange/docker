@@ -1,7 +1,7 @@
 #@data/values
 
+#@overlay/match-child-defaults missing_ok=True
 ---
-
 os_version: Ubuntu
 os_name: Ubuntu Focal
 packer_user: ubuntu

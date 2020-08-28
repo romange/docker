@@ -59,4 +59,4 @@ ytt -f packer.yaml -f ${config} -f ${os_vars} -o json > $pfile
 
 echo "Validating ${pfile}"
 packer validate $pfile
-echo packer build $@ $pfile
+packer build $@ $pfile

@@ -41,9 +41,31 @@ cp $tf/reset .tmux/
 mv $tf/disableht.sh bin/
 mv $tf/update_kernel.py bin/
 
+install_cmake() {
+  CMAKE_VER=$1
+  wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VER}/cmake-${CMAKE_VER}.tar.gz
+  tar xfz cmake-*gz && cd cmake-*
+  ./bootstrap && gmake -j4 cmake cpack ctest
+  gmake install
+  cd - && rm -rf cmake-*
+}
+
+. /etc/os-release
+
+if [[ $VERSION_ID == "2" ]]; then  # AL2 Linux
+  install_cmake 3.18.2
+  echo "alias ninja=ninja-build" >> .bash_aliases
+fi
+
 # Copy useful binaries
+if [[ $(uname -i) == "aarch64" ]]; then
+  arch='aarch64'
+else
+  arch='x86'
+fi
+
 ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
-s3cmd get $ARTPATH/bin/* bin/
+s3cmd get $ARTPATH/bin/$arch/* bin/
 
 # Finally, fix permissions.
 chown -R dev:dev /home/dev
