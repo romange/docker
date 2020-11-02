@@ -1,7 +1,9 @@
 #@data/values
 
 ---
-ami_id: ami-06f7efb202729c3c5
+#! eu-west-1, ebs, 20.04-amd64
+
+ami_id: ami-0aef57767f5404a3c
 instance_type: t3.large
 name: u20.04-x86
 

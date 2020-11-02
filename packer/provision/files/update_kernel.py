@@ -13,13 +13,18 @@ MAINLINE_URL = 'http://kernel.ubuntu.com/~kernel-ppa/mainline/'
 def get_release_url(arch, version):
     return MAINLINE_URL + 'v' + version + '/' + arch + '/'
 
+
+def is_cloud_deb(x: str) -> bool:
+    return ('lowlatency' not in x) and ('64k_' not in x) and ('snapdragon' not in x)
+
+
 def get_deb_files(release_url, suffix):
     checksum_url = release_url + 'CHECKSUMS'
     w = requests.get(checksum_url)
     w.raise_for_status()
     regex = re.compile('(linux-.*' + suffix + ')')
     a = regex.findall(w.text)
-    return [x for x in set(a) if 'lowlatency' not in x]
+    return [x for x in set(a) if is_cloud_deb(x)]
 
 
 def main():
@@ -66,6 +71,7 @@ def main():
     if args.i:
         print("installing deb files")
         subprocess.check_output(['sudo', 'dpkg', '-i'] + list(debs.values()))
+
 
 if __name__ == "__main__":
     # execute only if run as a script

@@ -1,0 +1,7 @@
+#@data/values
+---
+
+#! eu-west-1, ebs, 20.10 arm64
+ami_id: ami-0c7e24d0699b6f5e8
+instance_type: m6g.medium
+name: u20.10-aarch64

@@ -1,0 +1,8 @@
+#@data/values
+
+---
+#! eu-west-1, ebs, 20.10 amd64
+ami_id: ami-04ae95d1e29ff40de
+instance_type: t3.large
+name: u20.10-x86
+

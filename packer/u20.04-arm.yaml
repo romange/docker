@@ -1,5 +1,5 @@
 #@data/values
 ---
-ami_id: ami-0d83f7ffc3bcda389
+ami_id: ami-08eae9b2b97caf274
 instance_type: m6g.medium
 name: u20.04-aarch64

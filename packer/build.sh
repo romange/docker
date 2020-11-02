@@ -15,6 +15,7 @@ fi
 
 IS_ARM=0
 AL2=0
+UB10=0
 
 for ((i=1;i <= $#;));do
   arg=${!i}
@@ -27,6 +28,10 @@ for ((i=1;i <= $#;));do
     AL2=1
     shift
   ;;
+  --10)
+    UB10=1
+    shift
+  ;;
   -*|--*=) # bypass flags
       i=$((i + 1))
   ;;
@@ -36,18 +41,23 @@ done
 # For Ubuntu - check in http://cloud-images.ubuntu.com/locator/ec2/
 # for eu-west-1 focal
 # or go to http://cloud-images.ubuntu.com/query/focal/server/released.current.txt
-if [[ $IS_ARM == 1 && $AL2 == 1 ]]; then
-  config=al2-arm.yaml
+
+if [[ $AL2 == 1 ]]; then
   os_vars=al2.yaml
-elif [[ $IS_ARM == 1 && $AL2 == 0 ]]; then
-  config=u20.04-arm.yaml
+  pref_conf="al2"
+else
   os_vars=ubuntu.yaml
-elif [[ $IS_ARM == 0 && $AL2 == 1 ]]; then
-  config=al2-x86.yaml
-  os_vars=al2.yaml
-elif [[ $IS_ARM == 0 && $AL2 == 0 ]]; then
-  config=u20.04-x86.yaml
-  os_vars=ubuntu.yaml
+  if [[ $UB10 == 1 ]]; then
+    pref_conf="u20.10"
+  else
+    pref_conf="u20.04"
+  fi
+fi
+
+if [[ $IS_ARM == 1 ]]; then
+  config="${pref_conf}-arm.yaml"
+else
+  config="${pref_conf}-x86.yaml"
 fi
 
 echo '#cloud-config' > /tmp/userdata.yml

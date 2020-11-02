@@ -29,9 +29,9 @@ root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
 
 cd /home/dev
 
-for i in .gitconfig .bash_aliases .bashrc .tmux.conf
+for i in .gitconfig .bash_aliases .bashrc .tmux.conf supress.txt
  do
-  wget -qnc $root_gist/$i
+  wget -qN $root_gist/$i
 done
 
 mkdir -p .aws projects bin /root/.aws .tmux
@@ -40,6 +40,8 @@ cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
 mv $tf/disableht.sh bin/
 mv $tf/update_kernel.py bin/
+mv $tf/mount_disks.py bin/
+mv $tf/.bash_profile .
 
 install_cmake() {
   CMAKE_VER=$1
