@@ -5,3 +5,4 @@
 ami_id: ami-0c7e24d0699b6f5e8
 instance_type: m6g.medium
 name: u20.10-aarch64
+os_name: Groovy
