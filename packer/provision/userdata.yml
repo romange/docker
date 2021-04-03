@@ -25,11 +25,14 @@ users:
      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCano8DfBycFQ/2OxszQ5ZcnHpodZBI4XGsiTK+bw/RxGgwdL6V3/de53DtjZNCltCgfU04fw8wntm2SJ/PyguN8O/Kj3qSD9QHI04CBe2P/Z+GOfJUo528ocIj2PnWHTV8zs5XZVyRaZCLyNfiKTnkfY7EoTHDVJcuUE669v9Q5FDPVBp0eUMGW49Gw1i1z6dXJiv7pfEGyKCcMuGiPnCB357XsuxKzEThazlpuRFWXPqilBOI8hSapMd8G0TXU9xhGNNzpBdrZg6DFvoXX2JChD9sOBNumS0FMv0BEBbZeonMzMHoVU6mMfFMnYAEMJesCXK12vcr440HM8sXC20H
      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDBbvZmZwPKrvMmckFCSxvV+qt3Z3DXAwP64N8oGPiop1KBKnPj+ORLL2/k9zmPiVfceP4o9iomys/l4oVCq+pgtTXmPPBwgeFi/BpGeBR7D2cPWJaEuwe/4mG58YYlwSp12RjddE7a4TxgRsxlQ3z51GOvGyBJc5ig+7HroTN4Sw9ncBhNmmi59YJRA1KDEwTe5sJsfzfkrqjeGN4xhIZSRkpSHCPW2n9MC1eB4sNJUJl2xvn8JaR8oCLHsHd81f+ybbMURC0g3mRWakpuRnzdHGwzZWCfUwJGhW1BAp2I6zc7Sb+u0GyR+AnARIkTuUMirHsIeFW1a1hd54aSyn7nWHlQ6rKwX7withcDsQ/nhCkpTqcsbeEzHWe2XzH1UEnN351yIAyrI0sbgYI/tq1/dVEvP6796fdNTcd1RhvXc0OXlqdRU0iRxVKlVPdG/8YV6wfHiEOhW7kGtbh3OldS5Pox7sxN8mn+XmNRCW+5uuR62mbgPEO/YfZBl9/FPB8=
      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD1RiFpxzlFY6y40mUM+PkvT2T5eAvHM4hhp+DhRFHlCHlknwPCVVjyXucUowCSi+C1bslkIEyZ3Bc3vUiS6tAf+I2g3V1cEkCRidSeLGGFpQSTEZtEPbB75BRJ6v2fycWzw5Fxo1rvXVzPTpbxedXfsNh9zaBoVtKR6fP1muXD/z3lvmeNaANxsFgFVxW8PSHvD+mbXEiQItx5Uh9s2Mf2QgwqeHGxNUjqtUVC0Bg1PkpI01nQdSX9WWW78R2GnutFTjGSG7CuDuTwbbiBGGXBlgAk1NC1tQPEuZ9kLBcBALELwm5NQQFMPw9d3o4DAqPI61+9BRFgYN6oOLNHQ0Rb
+     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD59TM8WOpE0sHWWoO07BjuFUeh4z5rqppk570CAbiYaoNKWns1NhJxzJTBFD9jTZ9zdkNaxZDrs3oDHuurwKTYOm4qVOmfvkDZRSlzPUWsnINWZTxWrg6BsYhEcUdF6S6mjPVG4RuwSVPSD+T6Vrrwuw6nGtLTD/huKQZ9Gz3aalNp+wioqjGdqsjZInkr87CF/3FgQ5MR/xAgkFq/jG/hc0l+x1qBa1YE6rG/I8WPTCzV3Avt7LAcjoKhbrH2i0bDs8gjRqAKCDykrSsy5PUd+qmZX+phrpxV7utaS0GtN19ztT+C4ZTS0nF21foktI0Ufem6jFKAhwGPS8TJ1x4d omer1
+     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDsG+ByPAMdkpdbyhpd4OH2/2EhRcgKg0cisb5TfzZ72eznO0+p6h4vgfKj1axGbUZehSvLIDadGUAsQMs85vfm3Hwjp/0AEKlQWrCGYYd2W/7J16viQUX1tu3J8TUrjUNduTm7ZFi3XybjjjndlA4Hb5YBMNMXwmumOJ1GTbuH7OCfolTtShbFxLFYdWoPcYsO/OdvRu91GOk77Rnzb9JiHk9ExmeAh3cdZ07QdEjUUAfKS9bQCut2tP1Qr5Z6OzmJshp3Hls8Ults6ZTK/uzKsnrnrKezPbcWkQNEZeOdWE20OKvyLOKd1f8rWDeYmppH2J4frRGAl1vqgAwh9jMV omer2
 
 #@ common_pkgs = ["awscli", "acl", "automake", "autoconf", "binutils", "bison",
-#@                "bzip2", "ca-certificates", "ccache", "chrony", "curl", "doxygen", "htop", "iftop",
-#@                "iotop", "flex", "gdb", "graphviz", "git", "make", "libelf-dev",
-#@                "libtool", "mlocate", "ninja-build", "golang", "parallel", "sysstat", "tcptrace",
+#@                "bzip2", "ca-certificates", "ccache", "chrony", "cloc", "curl", "doxygen", "htop", "iftop",
+#@                "iotop", "flex", "gdb", "graphviz", "git", "golang",  "libelf-dev",
+#@                "libtool", "make", "mlocate", "ninja-build", "npm", "parallel", "sysstat",
+#@                "tcptrace",
 #@                "python3-pip", "python3-setuptools", "vim", "unzip", "wget", "zip"]
 
 

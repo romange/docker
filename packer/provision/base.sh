@@ -8,8 +8,10 @@ echo "********* Install Basics Server Environment ********"
 export DEBIAN_FRONTEND=noninteractive
 
 PATH=$PATH:/usr/local/bin
-pip3 install s3cmd
+pip3 install s3cmd git-remote-codecommit boto3
 which s3cmd
+
+npm install -g aws-cdk
 
 # Dispatch files that were put by packer.yaml into /tmp/files
 tf=/tmp/files
