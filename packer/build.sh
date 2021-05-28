@@ -50,7 +50,7 @@ else
   if [[ $UB10 == 1 ]]; then
     pref_conf="u20.10"
   else
-    pref_conf="u20.04"
+    pref_conf="u21.04"
   fi
 fi
 

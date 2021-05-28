@@ -29,9 +29,10 @@ users:
      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDsG+ByPAMdkpdbyhpd4OH2/2EhRcgKg0cisb5TfzZ72eznO0+p6h4vgfKj1axGbUZehSvLIDadGUAsQMs85vfm3Hwjp/0AEKlQWrCGYYd2W/7J16viQUX1tu3J8TUrjUNduTm7ZFi3XybjjjndlA4Hb5YBMNMXwmumOJ1GTbuH7OCfolTtShbFxLFYdWoPcYsO/OdvRu91GOk77Rnzb9JiHk9ExmeAh3cdZ07QdEjUUAfKS9bQCut2tP1Qr5Z6OzmJshp3Hls8Ults6ZTK/uzKsnrnrKezPbcWkQNEZeOdWE20OKvyLOKd1f8rWDeYmppH2J4frRGAl1vqgAwh9jMV omer2
 
 #@ common_pkgs = ["awscli", "acl", "automake", "autoconf", "binutils", "bison",
-#@                "bzip2", "ca-certificates", "ccache", "chrony", "cloc", "curl", "doxygen", "htop", "iftop",
+#@                "bzip2", "ca-certificates", "ccache", "cmake-curses-gui", "chrony", "cloc", "curl", 
+#@                "doxygen", "htop", "iftop",
 #@                "iotop", "flex", "gdb", "graphviz", "git", "golang",  "libelf-dev",
-#@                "libtool", "make", "mlocate", "ninja-build", "npm", "parallel", "sysstat",
+#@                "libtool", "make", "mlocate", "ninja-build", "npm", "parallel", "podman", "runc", "sysstat",
 #@                "tcptrace",
 #@                "python3-pip", "python3-setuptools", "vim", "unzip", "wget", "zip"]
 

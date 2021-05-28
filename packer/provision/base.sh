@@ -8,8 +8,7 @@ echo "********* Install Basics Server Environment ********"
 export DEBIAN_FRONTEND=noninteractive
 
 PATH=$PATH:/usr/local/bin
-pip3 install s3cmd git-remote-codecommit boto3
-which s3cmd
+pip3 install git-remote-codecommit boto3 
 
 npm install -g aws-cdk
 
@@ -25,6 +24,17 @@ systemctl enable huge_multiuser.service
 echo "* soft nofile 65535" >> /etc/security/limits.conf
 echo "* soft core unlimited" >> /etc/security/limits.conf
 
+ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
+
+if [[ $(uname -i) == "aarch64" ]]; then
+  arch='aarch64'
+else
+  arch='x86'
+fi
+
+aws s3 cp $ARTPATH/bin/$arch/s5cmd /usr/local/bin/ && chmod a+x /usr/local/bin/*
+s5cmd cp -n $ARTPATH/bin/$arch/* /usr/local/bin/
+chmod a+x /usr/local/bin/*
 
 echo "********* User Setup ********"
 root_gist=https://gist.githubusercontent.com/romange/43114d544e2981cfe4a6/raw
@@ -61,26 +71,18 @@ if [[ $VERSION_ID == "2" ]]; then  # AL2 Linux
   echo "alias ninja=ninja-build" >> .bash_aliases
 fi
 
-# Copy useful binaries
-if [[ $(uname -i) == "aarch64" ]]; then
-  arch='aarch64'
-else
-  arch='x86'
-fi
-
-ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
-s3cmd get $ARTPATH/bin/$arch/* bin/
+# Copy useful binaries (s3cmd is broken in 21.04 so for now we use s3-cli)
+# s3cmd get $ARTPATH/bin/$arch/* bin/
 
 # Finally, fix permissions.
 chown -R dev:dev /home/dev
-chmod a+x bin/*
 
 
 echo "********* Install BOOST ********"
-BVER=1.73.0
+BVER=1.76.0
 BOOST=boost_${BVER//./_}   # replace all . with _
 
-url="http://dl.bintray.com/boostorg/release/${BVER}/source/$BOOST.tar.bz2"
+url="https://boostorg.jfrog.io/artifactory/main/release/${BVER}/source/$BOOST.tar.bz2"
 echo "Downloading from $url"
 
 mkdir -p /tmp/boost && pushd /tmp/boost
