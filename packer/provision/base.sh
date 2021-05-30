@@ -24,6 +24,10 @@ systemctl enable huge_multiuser.service
 echo "* soft nofile 65535" >> /etc/security/limits.conf
 echo "* soft core unlimited" >> /etc/security/limits.conf
 
+# Disable mitigations
+sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"/\1 mitigations=off"/' /etc/default/grub
+update-grub
+
 ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
 
 if [[ $(uname -i) == "aarch64" ]]; then
