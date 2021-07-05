@@ -8,7 +8,7 @@ echo "********* Install Basics Server Environment ********"
 export DEBIAN_FRONTEND=noninteractive
 
 PATH=$PATH:/usr/local/bin
-pip3 install git-remote-codecommit boto3 
+pip3 install -U git-remote-codecommit awscli
 
 npm install -g aws-cdk
 
@@ -25,7 +25,7 @@ echo "* soft nofile 65535" >> /etc/security/limits.conf
 echo "* soft core unlimited" >> /etc/security/limits.conf
 
 # Disable mitigations
-sed -i 's/\(^GRUB_CMDLINE_LINUX_DEFAULT=".*\)"/\1 mitigations=off"/' /etc/default/grub
+sed -i 's/\(^GRUB_CMDLINE_LINUX=".*\)"/\1 mitigations=off"/' /etc/default/grub
 update-grub
 
 ARTPATH=$(aws ssm get-parameters --names artifactdir  --query "Parameters[*].{Value:Value}" --output text)
@@ -50,7 +50,7 @@ for i in .gitconfig .bash_aliases .bashrc .tmux.conf supress.txt
   wget -qN $root_gist/$i
 done
 
-mkdir -p .aws projects bin /root/.aws .tmux
+mkdir -p .aws projects bin /root/.aws .tmux .config/htop
 cp $tf/aws_config .aws/config
 cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
@@ -58,6 +58,7 @@ mv $tf/disableht.sh bin/
 mv $tf/update_kernel.py bin/
 mv $tf/mount_disks.py bin/
 mv $tf/.bash_profile .
+mv $tf/htoprc .config/htop/
 
 install_cmake() {
   CMAKE_VER=$1

@@ -3,7 +3,7 @@
 ---
 #! https://cloud-images.ubuntu.com/locator/ec2/
 #! eu-west-1 ebs 20.10 amd64
-ami_id: ami-07117581e563ee147
+ami_id: ami-0b66abce162eb2baf
 instance_type: t3.large
 name: u20.10-x86
 os_name: Groovy
