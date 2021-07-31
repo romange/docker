@@ -2,9 +2,7 @@
 
 ---
 #! eu-west-1 ebs 21.04 amd
-
-ami_id: ami-0615b78d2b235d4ec
-instance_type: m5.large
+ami_id: ami-0d7626a9c2ceab1ac
+instance_type: m5.xlarge
 name: u21.04-x86
 os_name: Hippo
-

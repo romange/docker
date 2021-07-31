@@ -13,6 +13,13 @@ then
     exit 1
 fi
 
+if ! hash cue &> /dev/null
+then
+    echo "cue could not be found, install from https://github.com/cuelang/cue/releases"
+    exit 1
+fi
+
+
 IS_ARM=0
 AL2=0
 UB10=0
@@ -44,9 +51,11 @@ done
 
 if [[ $AL2 == 1 ]]; then
   os_vars=al2.yaml
+  cue_vars=al2
   pref_conf="al2"
 else
   os_vars=ubuntu.yaml
+  cue_vars=ubuntu
   if [[ $UB10 == 1 ]]; then
     pref_conf="u20.10"
   else
@@ -61,7 +70,7 @@ else
 fi
 
 echo '#cloud-config' > /tmp/userdata.yml
-ytt -f ${os_vars} -f provision/userdata.yml >> /tmp/userdata.yml
+cue export provision/userdata.cue -t osv=${cue_vars} --out yaml >> /tmp/userdata.yml
 
 pfile=$(mktemp -u /tmp/packer.json.XXXX)
 echo "Generating packer file $pfile"
