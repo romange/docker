@@ -1,8 +1,0 @@
-#@data/values
----
-
-#! eu-west-1 ebs 20.10 arm64
-ami_id: ami-07d8329c301fd786c
-instance_type: m6g.medium
-name: u20.10-aarch64
-os_name: Groovy

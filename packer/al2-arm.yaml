@@ -1,7 +1,0 @@
-#@data/values
-
----
-  ami_id: ami-08f51d843bf37ded6
-  instance_type: m6g.medium
-  name: al2-aarch64
-

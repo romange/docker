@@ -1,8 +1,0 @@
-#@data/values
-
-#! overlay direction must come before ---
-#@overlay/match-child-defaults missing_ok=True
----
-os_version: AL2
-os_name: Amazon Linux 2
-packer_user: ec2-user

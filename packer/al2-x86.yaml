@@ -1,6 +1,0 @@
-#@data/values
----
-ami_id: "ami-0bb3fad3c0286ebd5"
-instance_type: "t3.large"
-name: "al2-x86"
-

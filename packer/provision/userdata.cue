@@ -32,9 +32,9 @@ _ubuntu_pkgs: [ "ack-grep", "cmake", "g++", "libunwind-dev", "linux-tools-generi
 	"vim-gui-common", "net-tools"]
 
 // _os_version is limited to either al2 or ubuntu. 
-// the value is injected via '-t osv=...' argument
-_os_version: "al2" | "ubuntu" @tag(osv)
+// the value is injected via '-t osf=...' argument
+_os_flavour: "al2" | "ubuntu" @tag(osf)
 
-if _os_version == "ubuntu" {
+if _os_flavour == "ubuntu" {
 	packages: _common_pkgs + _ubuntu_pkgs
 }
