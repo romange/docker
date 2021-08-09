@@ -31,6 +31,9 @@ _ubuntu_pkgs: [ "ack-grep", "cmake", "g++", "libunwind-dev", "linux-tools-generi
 	"docker.io", "libhugetlbfs-bin", "libncurses5-dev", "libssl-dev", "libxml2-dev",
 	"vim-gui-common", "net-tools"]
 
+// Remove systems that add overhead to syscalls.
+runcmd: [ "systemctl disable apparmor", "modprobe -rv ip_tables" ]
+
 // _os_version is limited to either al2 or ubuntu. 
 // the value is injected via '-t osf=...' argument
 _os_flavour: "al2" | "ubuntu" @tag(osf)

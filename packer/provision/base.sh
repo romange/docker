@@ -112,3 +112,5 @@ echo "Building targets with ${b2_args[@]}"
 ./b2 install "${b2_args[@]}" -d0
 ln -s /opt/${BOOST} /opt/boost
 
+cd  /home/dev/projects
+git clone --depth 1 https://github.com/brendangregg/FlameGraph

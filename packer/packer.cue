@@ -11,7 +11,7 @@ _ins_type: {
 	x86:     "m5.xlarge"
 }
 
-
+// https://cloud-images.ubuntu.com/locator/ec2/
 _ami: x86: {
 	// eu-west-1 ebs 21.04 amd
 	"21.04": "ami-0d7626a9c2ceab1ac"
@@ -22,7 +22,7 @@ _ami: x86: {
 
 _ami: aarch64: {
 	//  eu-west-1 ebs 21.04 arm
-	"21.04": "ami-0622951acf3501c7a"
+	"21.04": "ami-08e4216aefb5fa5cb"
 }
 
 _config: {

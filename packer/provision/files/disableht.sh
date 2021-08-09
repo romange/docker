@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 for cpunum in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list |
                 cut -s -d, -f2- | tr ',' '\n' | sort -un)
