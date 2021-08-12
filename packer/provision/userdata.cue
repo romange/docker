@@ -21,7 +21,7 @@ users: [
 
 _common_pkgs: ["acl", "automake", "autoconf", "binutils", "bison",
 	"bzip2", "ca-certificates", "ccache", "cmake-curses-gui", "chrony", "cloc", "curl",
-	"doxygen", "htop", "iftop",
+	"dkms", "doxygen", "htop", "iftop",
 	"iotop", "flex", "gdb", "graphviz", "git", "golang", "libelf-dev",
 	"libtool", "make", "mlocate", "ninja-build", "npm", "parallel", "podman", "runc", "sysstat",
 	"tcptrace",

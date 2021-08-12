@@ -2,9 +2,10 @@
 set -e
 
 function print_usage_exit() {
-	echo "Usage: $0 -i <dev> [-n]"
+	echo "Usage: $0 -i <dev> [-n] [-c cpuid]"
 	echo "-n  Dry run"
-    echo "Note: It is advised to run 'sudo systemctl disable irqbalance.service' before running this script"
+	echo "-c cpuid  Assign all irq queues to CPU <cpuid>."
+	echo "Note: It is advised to run 'sudo systemctl disable irqbalance.service' before running this script"
 	exit 1
 }
 
@@ -18,34 +19,49 @@ while [[ ($# -ge 1) ]]; do
 	"-i")
 		shift
 		[[ $# -ge 1 ]] || print_usage_exit
-		DEVICE="$1"		
+		DEVICE="$1"
 		;;
     "-n")
-	    DRY=1		
+	    DRY=1
 		;;
+	"-c")
+	    shift
+		if ! [[ $1 =~ [0-9]+ ]] ; then
+			echo "cpuid: Not a number $1" >&2; exit 1
+		fi
+	    CPUID=$(($1))
+	    ;;
 	*)
 		print_usage_exit
 		;;
-	esac    
+	esac
     shift
 done
 
-if [[ "$EUID" -ne 0 && $DRY != "1" ]]; then 
+
+if [[ "$EUID" -ne 0 && $DRY != "1" ]]; then
   echo "Please run as root"
   exit 1
 fi
 
 IRQS=($(grep "${DEVICE}-Tx-Rx" /proc/interrupts | cut -d: -f1 | tr -d "[:blank:]"))
 ONLINE=($(cat /sys/devices/system/cpu/online | awk '/-/{for (i=$1; i<=$2; i++) printf "%s%s",i,ORS;next} 1' RS=, FS=-))
-NUM_ONLINE=${#ONLINE[@]}
+
+if [[ -v CPUID ]]; then
+  NUM_ONLINE=1
+else
+  NUM_ONLINE=${#ONLINE[@]}
+fi
+
 NUM_IRQS=${#IRQS[@]}
 
-if [ $NUM_ONLINE -lt $NUM_IRQS ] ; then
+if [[ $NUM_ONLINE -lt $NUM_IRQS && -z $CPUID ]] ; then
 	echo "There are less online cpus than network IRQs: $NUM_ONLINE vs $NUM_IRQS"
 	exit 1
 fi
 
 echo "Assigning ${NUM_ONLINE} cpus to $NUM_IRQS network irqs"
+
 
 # This should prioritize handling IRQs on CPUs from different cores.
 # For example, when we have 36 vCPUs, I expect that 0-17 will belong to different cores
@@ -55,10 +71,13 @@ echo "Assigning ${NUM_ONLINE} cpus to $NUM_IRQS network irqs"
 # core for multiple IRQs. And if number of IRQs is higher than we will assign some vCPUs from 
 # the upper half range.
 
-i=0;
-for i in "${!IRQS[@]}"; do 
+for i in "${!IRQS[@]}"; do
   irq=${IRQS[$i]}
-  new_cpu=${ONLINE[$i]}
+  if [[ -v CPUID ]]; then
+    new_cpu=$CPUID
+  else
+  	new_cpu=${ONLINE[$i]}
+  fi
   irq_list_path="/proc/irq/$irq/smp_affinity_list"
   curr=$(cat $irq_list_path)
   echo "Setting CPU $new_cpu to handle irq $irq, currently set ${curr}"

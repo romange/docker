@@ -1,11 +1,11 @@
 #!/bin/bash
+
 set -e
 
-export AWS_DEFAULT_REGION=eu-west-1
 
 echo "********* Install Basics Server Environment ********"
 
-export DEBIAN_FRONTEND=noninteractive
+apt install -y linux-tools-`uname -r`
 
 PATH=$PATH:/usr/local/bin
 pip3 install -U git-remote-codecommit awscli
@@ -57,11 +57,10 @@ mkdir -p .aws projects bin /root/.aws .tmux .config/htop
 cp $tf/aws_config .aws/config
 cp $tf/aws_config /root/.aws/config
 cp $tf/reset .tmux/
-mv $tf/disableht.sh bin/
-mv $tf/update_kernel.py bin/
-mv $tf/mount_disks.py bin/
 mv $tf/.bash_profile .
 mv $tf/htoprc .config/htop/
+
+mv $tf/bin/* bin/
 
 install_cmake() {
   CMAKE_VER=$1
@@ -84,6 +83,21 @@ fi
 
 # Finally, fix permissions.
 chown -R dev:dev /home/dev
+
+echo "************* Install ENA ****************"
+ENA_SRC=/usr/src/amzn-drivers-2.5.0
+ENA_VER=2.5.0
+
+cd /tmp
+wget -nv https://github.com/amzn/amzn-drivers/archive/refs/tags/ena_linux_2.5.0.tar.gz
+
+mkdir -p $ENA_SRC
+tar -xvf ena_linux_2.5.0.tar.gz -C $ENA_SRC --strip-components=1
+mv $tf/ena.conf $ENA_SRC/dkms.conf
+
+dkms add -m amzn-drivers -v $ENA_VER
+dkms build -m amzn-drivers -v $ENA_VER
+dkms install -m amzn-drivers -v $ENA_VER
 
 
 echo "********* Install BOOST ********"
@@ -112,5 +126,7 @@ echo "Building targets with ${b2_args[@]}"
 ./b2 install "${b2_args[@]}" -d0
 ln -s /opt/${BOOST} /opt/boost
 
+
+echo "************* Checkout FlameGraph ****************"
 cd  /home/dev/projects
 git clone --depth 1 https://github.com/brendangregg/FlameGraph

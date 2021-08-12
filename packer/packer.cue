@@ -17,7 +17,7 @@ _ami: x86: {
 	"21.04": "ami-0d7626a9c2ceab1ac"
 	"20.10": "ami-0b66abce162eb2baf"
 
-	"al2":   "ami-0bb3fad3c0286ebd5"
+	"al2": "ami-0bb3fad3c0286ebd5"
 }
 
 _ami: aarch64: {
@@ -81,28 +81,33 @@ builders: [{
 	user_data_file: "/tmp/userdata.yml"
 }]
 
-provisioners: [{
-	type:        "file"
-	source:      "provision/files"
-	destination: "/tmp/"
-}, {
+provisioners: [
+{
 	type: "shell"
 	inline: [
 		"""
 			while [ ! -f /var/lib/cloud/instance/boot-finished ]
 			  do echo 'Waiting for cloud-init...'
 			sleep 10
-			done
-
+			done			
 			""",
-		"echo finished",
+		"echo finished, rebooting",
+		"sudo reboot",
 	]
+	expect_disconnect: true
+}, 	
+{
+	type:        "file"
+	source:      "provision/files"
+	destination: "/tmp/"
 }, {
 	type: "shell"
-
+	environment_vars: ["DEBIAN_FRONTEND=noninteractive", "AWS_DEFAULT_REGION=\(variables.aws_region)" ],
 	// {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
 	// containing inline commands. Since sudo in ec2 is without a password we do not have
 	// to pipe the password into it.
-	execute_command: "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
-	script:          "provision/base.sh"
-}]
+	execute_command:   "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
+	script:            "provision/base.sh"
+},
+
+]
