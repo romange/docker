@@ -85,14 +85,14 @@ fi
 chown -R dev:dev /home/dev
 
 echo "************* Install ENA ****************"
-ENA_SRC=/usr/src/amzn-drivers-2.5.0
-ENA_VER=2.5.0
+ENA_VER=2.6.0
+ENA_SRC="/usr/src/amzn-drivers-${ENA_VER}"
 
 cd /tmp
-wget -nv https://github.com/amzn/amzn-drivers/archive/refs/tags/ena_linux_2.5.0.tar.gz
+wget -nv https://github.com/amzn/amzn-drivers/archive/refs/tags/ena_linux_${ENA_VER}.tar.gz
 
 mkdir -p $ENA_SRC
-tar -xvf ena_linux_2.5.0.tar.gz -C $ENA_SRC --strip-components=1
+tar -xvf ena_linux_${ENA_VER}.tar.gz -C $ENA_SRC --strip-components=1
 mv $tf/ena.conf $ENA_SRC/dkms.conf
 
 dkms add -m amzn-drivers -v $ENA_VER
@@ -100,32 +100,33 @@ dkms build -m amzn-drivers -v $ENA_VER
 dkms install -m amzn-drivers -v $ENA_VER
 
 
-echo "********* Install BOOST ********"
-BVER=1.76.0
-BOOST=boost_${BVER//./_}   # replace all . with _
+if false; then
+  echo "********* Install BOOST ********"
+  BVER=1.77.0
+  BOOST=boost_${BVER//./_}   # replace all . with _
 
-url="https://boostorg.jfrog.io/artifactory/main/release/${BVER}/source/$BOOST.tar.bz2"
-echo "Downloading from $url"
+  url="https://boostorg.jfrog.io/artifactory/main/release/${BVER}/source/$BOOST.tar.bz2"
+  echo "Downloading from $url"
 
-mkdir -p /tmp/boost && pushd /tmp/boost
-wget -nv ${url} -O $BOOST.tar.bz2
-tar -xjf $BOOST.tar.bz2
+  mkdir -p /tmp/boost && pushd /tmp/boost
+  wget -nv ${url} -O $BOOST.tar.bz2
+  tar -xjf $BOOST.tar.bz2
 
-booststap_arg="--prefix=/opt/${BOOST} --without-libraries=graph_parallel,graph,wave,test,mpi,python"
-cd $BOOST
-boostrap_cmd=`readlink -f bootstrap.sh`
+  booststap_arg="--prefix=/opt/${BOOST} --without-libraries=graph_parallel,graph,wave,test,mpi,python"
+  cd $BOOST
+  boostrap_cmd=`readlink -f bootstrap.sh`
 
-echo "Running ${boostrap_cmd} ${booststap_arg}"
-${boostrap_cmd} ${booststap_arg} || { cat bootstrap.log; return 1; }
-b2_args=(define=BOOST_COROUTINES_NO_DEPRECATION_WARNING=1 link=shared variant=release debug-symbols=on
-          threading=multi --without-test --without-math --without-log --without-locale --without-wave
-          --without-regex --without-python -j4)
+  echo "Running ${boostrap_cmd} ${booststap_arg}"
+  ${boostrap_cmd} ${booststap_arg} || { cat bootstrap.log; return 1; }
+  b2_args=(define=BOOST_COROUTINES_NO_DEPRECATION_WARNING=1 link=shared variant=release debug-symbols=on
+            threading=multi --without-test --without-math --without-log --without-locale --without-wave
+            --without-regex --without-python -j4)
 
-echo "Building targets with ${b2_args[@]}"
-./b2 "${b2_args[@]}" cxxflags='-std=c++14 -Wno-deprecated-declarations'
-./b2 install "${b2_args[@]}" -d0
-ln -s /opt/${BOOST} /opt/boost
-
+  echo "Building targets with ${b2_args[@]}"
+  ./b2 "${b2_args[@]}" cxxflags='-std=c++14 -Wno-deprecated-declarations'
+  ./b2 install "${b2_args[@]}" -d0
+  ln -s /opt/${BOOST} /opt/boost
+fi
 
 echo "************* Checkout FlameGraph ****************"
 cd  /home/dev/projects

@@ -29,7 +29,7 @@ _common_pkgs: ["acl", "automake", "autoconf", "binutils", "bison",
 
 _ubuntu_pkgs: [ "ack-grep", "cmake", "g++", "libunwind-dev", "linux-tools-generic", "libbz2-dev",
 	"docker.io", "libhugetlbfs-bin", "libncurses5-dev", "libssl-dev", "libxml2-dev",
-	"vim-gui-common", "net-tools"]
+	"vim-gui-common", "net-tools", "libboost-fiber-dev"]
 
 // Remove systems that add overhead to syscalls.
 runcmd: [ "systemctl disable apparmor", "modprobe -rv ip_tables" ]

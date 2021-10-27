@@ -16,7 +16,7 @@ fi
 
 IS_ARM=0
 AL2=0
-UB10=0
+UB10=1
 
 for ((i=1;i <= $#;));do
   arg=${!i}
@@ -29,8 +29,8 @@ for ((i=1;i <= $#;));do
     AL2=1
     shift
   ;;
-  --10)
-    UB10=1
+  --04)
+    UB10=0
     shift
   ;;
   -*|--*=) # bypass flags
@@ -50,7 +50,7 @@ else
   os_vars=ubuntu.yaml
   cue_vars=ubuntu
   if [[ $UB10 == 1 ]]; then
-    osv="20.10"
+    osv="21.10"
   else
     osv="21.04"
   fi

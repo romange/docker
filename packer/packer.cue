@@ -1,28 +1,28 @@
 package packer
 
 _nick: {
+	"21.10": "Impish"
 	"21.04": "Hippo"
-	"20.10": "Groovy"
 	"al2":   "Amazon Linux 2"
 }
 
 _ins_type: {
 	aarch64: "m6g.medium"
-	x86:     "m5.xlarge"
+	x86:     "c5.xlarge"
 }
 
 // https://cloud-images.ubuntu.com/locator/ec2/
+// https://cloud-images.ubuntu.com/locator/daily/
 _ami: x86: {
-	// eu-west-1 ebs 21.04 amd
-	"21.04": "ami-0d7626a9c2ceab1ac"
-	"20.10": "ami-0b66abce162eb2baf"
-
-	"al2": "ami-0bb3fad3c0286ebd5"
+   // eu-west-1 ebs 21.04 amd
+   "21.04": "ami-0d7626a9c2ceab1ac"
+   "21.10": "ami-0b12a0e706f8120b0"
+   "al2": "ami-0bb3fad3c0286ebd5"
 }
 
 _ami: aarch64: {
-	//  eu-west-1 ebs 21.04 arm
-	"21.04": "ami-08e4216aefb5fa5cb"
+	//  eu-west-1 ebs 21.10 arm
+	"21.10": "ami-02c2b9510e386bd70"
 }
 
 _config: {
@@ -32,17 +32,17 @@ _config: {
 
 	instance_type: _ins_type[arch]
 	ubuntu: {
-		pref:     "u"
+		prefix:     "u"
 		ssh_user: "ubuntu"
 	}
 
 	al2: {
-		pref:     ""
+		prefix:     ""
 		ssh_user: "ec2-user"
 	}
 
 	ami:  _ami[arch][os_ver]
-	name: _config[os_flavour].pref + os_ver + "-" + arch
+	name: _config[os_flavour].prefix + os_ver + "-" + arch
 }
 
 variables: {
