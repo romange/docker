@@ -38,9 +38,10 @@ fi
 
 wget -P /etc/bash_completion.d/ https://raw.githubusercontent.com/imomaliev/tmux-bash-completion/master/completions/tmux
 
+echo "Running: 'aws s3 cp $ARTPATH/bin/$arch/s5cmd'"
 
-aws s3 cp $ARTPATH/bin/$arch/s5cmd /usr/local/bin/ && chmod a+x /usr/local/bin/*
-s5cmd cp -n $ARTPATH/bin/$arch/* /usr/local/bin/
+aws s3 cp s3://$ARTPATH/bin/$arch/s5cmd /usr/local/bin/ && chmod a+x /usr/local/bin/*
+s5cmd cp -n s3://$ARTPATH/bin/$arch/* /usr/local/bin/
 chmod a+x /usr/local/bin/*
 
 echo "********* User Setup ********"

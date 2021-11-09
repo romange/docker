@@ -14,14 +14,15 @@ _ins_type: {
 // https://cloud-images.ubuntu.com/locator/ec2/
 // https://cloud-images.ubuntu.com/locator/daily/
 _ami: x86: {
-   // eu-west-1 ebs 21.04 amd
-   "21.04": "ami-0d7626a9c2ceab1ac"
-   "21.10": "ami-0b12a0e706f8120b0"
-   "al2": "ami-0bb3fad3c0286ebd5"
+	"21.04": "ami-0d7626a9c2ceab1ac"
+
+	// eu-central-1 ebs 21.10 amd
+	"21.10": "ami-0df357952f51264a2"
+	"al2":   "ami-0bb3fad3c0286ebd5"
 }
 
 _ami: aarch64: {
-	//  eu-west-1 ebs 21.10 arm
+	// eu-central-1 ebs 21.10 arm
 	"21.10": "ami-02c2b9510e386bd70"
 }
 
@@ -32,12 +33,12 @@ _config: {
 
 	instance_type: _ins_type[arch]
 	ubuntu: {
-		prefix:     "u"
+		prefix:   "u"
 		ssh_user: "ubuntu"
 	}
 
 	al2: {
-		prefix:     ""
+		prefix:   ""
 		ssh_user: "ec2-user"
 	}
 
@@ -46,7 +47,7 @@ _config: {
 }
 
 variables: {
-	aws_region:    "eu-west-1"
+	aws_region:    "eu-central-1"
 	name:          _config.name
 	src_ami_id:    _config.ami
 	instance_type: _config.instance_type
@@ -82,32 +83,32 @@ builders: [{
 }]
 
 provisioners: [
-{
-	type: "shell"
-	inline: [
-		"""
-			while [ ! -f /var/lib/cloud/instance/boot-finished ]
-			  do echo 'Waiting for cloud-init...'
-			sleep 10
-			done			
-			""",
-		"echo finished, rebooting",
-		"sudo reboot",
-	]
-	expect_disconnect: true
-}, 	
-{
-	type:        "file"
-	source:      "provision/files"
-	destination: "/tmp/"
-}, {
-	type: "shell"
-	environment_vars: ["DEBIAN_FRONTEND=noninteractive", "AWS_DEFAULT_REGION=\(variables.aws_region)" ],
-	// {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
-	// containing inline commands. Since sudo in ec2 is without a password we do not have
-	// to pipe the password into it.
-	execute_command:   "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
-	script:            "provision/base.sh"
-},
+	{
+		type: "shell"
+		inline: [
+			"""
+				while [ ! -f /var/lib/cloud/instance/boot-finished ]
+				  do echo 'Waiting for cloud-init...'
+				sleep 10
+				done			
+				""",
+			"echo finished, rebooting",
+			"sudo reboot",
+		]
+		expect_disconnect: true
+	},
+	{
+		type:        "file"
+		source:      "provision/files"
+		destination: "/tmp/"
+	}, {
+		type: "shell"
+		environment_vars: ["DEBIAN_FRONTEND=noninteractive", "AWS_DEFAULT_REGION=\(variables.aws_region)"]
+		// {{.Vars}} expands to environment variable list. {{.Path}} expands to the path of the script
+		// containing inline commands. Since sudo in ec2 is without a password we do not have
+		// to pipe the password into it.
+		execute_command: "{{ .Vars }} sudo -E /bin/bash '{{ .Path }}'"
+		script:          "provision/base.sh"
+	},
 
 ]
