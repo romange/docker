@@ -1,8 +1,7 @@
 # terraform apply -var="project=..."
 variable project {}
 variable bucket {}
-variable region {default = "europe-west4"}
-variable zone { default = "europe-west4-a" }
+variable region {default = "us-east1"}
 
 
 provider "google" {
@@ -28,14 +27,14 @@ module "iam_projects_iam" {
   projects = [var.project]
 
   bindings = {
-    "roles/compute.instanceAdmin.v1" = [
-      local.account_id,      
-    ]
+    /* "roles/compute.instanceAdmin.v1" = [
+       local.account_id,      
+     ]
 
-    "roles/iam.serviceAccountUser" = [
-      local.account_id,      
-    ]
-
+     "roles/iam.serviceAccountUser" = [
+       local.account_id,      
+     ]
+  */
     "roles/iap.tunnelResourceAccessor" = [
       local.account_id,      
     ]
