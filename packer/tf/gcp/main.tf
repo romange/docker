@@ -27,15 +27,15 @@ module "iam_projects_iam" {
   projects = [var.project]
 
   bindings = {
-    /* "roles/compute.instanceAdmin.v1" = [
+    "roles/secretmanager.secretAccessor" = [
        local.account_id,      
      ]
 
-     "roles/iam.serviceAccountUser" = [
+     "roles/storage.objectViewer" = [
        local.account_id,      
      ]
-  */
-    "roles/iap.tunnelResourceAccessor" = [
+  
+    "roles/viewer" = [
       local.account_id,      
     ]
   }
